@@ -1,0 +1,23 @@
+{
+  "name": "preset-js",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "test:browser": "playwright test",
+    "server": "serve",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write ."
+  },
+  "author": "",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.44.1",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "serve": "^14.2.3"
+  },
+  "type": "module"
+}

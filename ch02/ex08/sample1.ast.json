@@ -1,0 +1,90 @@
+{
+  "type": "Program",
+  "start": 0,
+  "end": 30,
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "start": 0,
+      "end": 5,
+      "declarations": [
+        {
+          "type": "VariableDeclarator",
+          "start": 4,
+          "end": 5,
+          "id": {
+            "type": "Identifier",
+            "start": 4,
+            "end": 5,
+            "name": "a"
+          },
+          "init": null
+        }
+      ],
+      "kind": "let"
+    },
+    {
+      "type": "ExpressionStatement",
+      "start": 7,
+      "end": 14,
+      "expression": {
+        "type": "AssignmentExpression",
+        "start": 7,
+        "end": 14,
+        "operator": "=",
+        "left": {
+          "type": "Identifier",
+          "start": 7,
+          "end": 8,
+          "name": "a"
+        },
+        "right": {
+          "type": "Literal",
+          "start": 13,
+          "end": 14,
+          "value": 3,
+          "raw": "3"
+        }
+      }
+    },
+    {
+      "type": "ExpressionStatement",
+      "start": 16,
+      "end": 30,
+      "expression": {
+        "type": "CallExpression",
+        "start": 16,
+        "end": 30,
+        "callee": {
+          "type": "MemberExpression",
+          "start": 16,
+          "end": 27,
+          "object": {
+            "type": "Identifier",
+            "start": 16,
+            "end": 23,
+            "name": "console"
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 27,
+            "name": "log"
+          },
+          "computed": false,
+          "optional": false
+        },
+        "arguments": [
+          {
+            "type": "Identifier",
+            "start": 28,
+            "end": 29,
+            "name": "a"
+          }
+        ],
+        "optional": false
+      }
+    }
+  ],
+  "sourceType": "script"
+}
