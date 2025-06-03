@@ -1,9 +1,9 @@
 export function eq(a, b) {
   // TODO: ここを実装しなさい
-  return a == b;
+  return false;
 }
 
 export function lte(a, b) {
   // TODO: ここを実装しなさい
-  return a <= b;
+  return false;
 }
