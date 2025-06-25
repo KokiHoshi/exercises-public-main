@@ -22,7 +22,8 @@ console.log(sym3 === sym4);
 // Symbol.for() の挙動確認
 const sharedObj = {
   [sym3]: "sharedValue"
+  // [sym4]: "sharedValue2" と追加すると下のconsole.logはどうなるか？
 };
 
 console.log(sharedObj[sym3]);
-console.log(sharedObj[sym4]);
+console.log(sharedObj[sym4]); // sym3,sym4共にsharedValue2となる
