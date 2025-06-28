@@ -10,8 +10,8 @@ describe('escapeString functions', () => {
     { input: '\v', expected: '\\v' },
     { input: '\f', expected: '\\f' },
     { input: '\r', expected: '\\r' },
-    { input: '"', expected: '\\"' },
-    { input: "'", expected: "\\'" },
+    { input: '\"', expected: '\\"' },
+    { input: "\'", expected: "\\'" },
     { input: '\\', expected: '\\\\' },
     { input: 'a\tb\nc"\'\\\0', expected: 'a\\tb\\nc\\"\\\'\\\\\\0' },
   ];

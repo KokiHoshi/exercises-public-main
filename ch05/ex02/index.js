@@ -10,7 +10,7 @@ export function escapeStringIfElse(str) {
       else if (ch === "\f") result += "\\f";
       else if (ch === "\r") result += "\\r";
       else if (ch === "\"") result += "\\\"";
-      else if (ch === "'") result += "\\'";
+      else if (ch === "\'") result += "\\'";
       else if (ch === "\\") result += "\\\\";
       else result += ch;
     }
@@ -31,7 +31,7 @@ export function escapeStringIfElse(str) {
         case "\f": result += "\\f"; break;
         case "\r": result += "\\r"; break;
         case "\"": result += "\\\""; break;
-        case "'": result += "\\'"; break;
+        case "\'": result += "\\'"; break;
         case "\\": result += "\\\\"; break;
         default: result += ch;
       }
