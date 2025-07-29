@@ -1,6 +1,6 @@
 /* eslint no-sparse-arrays: 0 */
 
-import { sum, join, reverse, every, some } from "./index.ts";
+import { sum, join, reverse, every, some } from "./index.js";
 
 test("sum", () => {
   expect(sum()).toStrictEqual(0);
