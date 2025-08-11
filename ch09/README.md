@@ -19,10 +19,13 @@ test("class puzzle", () => {
 
 **出題範囲**: 9.3.1
 
-## 問題 9.2 💻📄
+## 問題 9.2 💻🖋️
 
-値を読み出す度にその値が 1 ずつ増えていくフィールドを持つクラスを作りなさい。
-そのフィールドの初期値は 0 とします。
+ゲッターメソッドは値の取得以外の処理も記述することができる。
+一例として、以下のような値を読み出す度にその値が 1 ずつ増えていくゲッターを持つクラスを作りなさい(初回呼び出しは0を返す)。
+
+また一方で、このようなクラス構造は一般的に良くないとされている。
+このクラスの問題点を説明しなさい。
 
 ```ts
 import { C } from "./index.js"; // ts でも可
@@ -39,21 +42,31 @@ test("", () => {
 
 ## 問題 9.3 💻🧪
 
-以下のクラス実装では、外部からフィールド x に直接アクセスできてしまいます。
+以下のクラスは常に正の数値を保持するクラスで、0以下の値を保持することを許容していない。
+一方で、`x`のフィールドは外部から直接アクセス可能なため、常に正の値を保持するという条件を破った状態を作ることができてしまう。
+このクラスをクロージャを用いて書き直し、フィールド`x`に対して外部から直接書き換えができないようにしなさい。(実装方法はテキストP.226の例を参考にしなさい。)
 
 ```ts
-class C {
-  x = 42;
+class PositiveNumber {
+  constructor(x) {
+    if(x <= 0) {
+      throw new Error("require : x > 0");
+    }
+    this.x = x;
+  }
 
   getX() {
     return this.x;
   }
+
+  setX(x) {
+    if(x <= 0) {
+      throw new Error("require : x > 0");
+    }
+    this.x = x;
+  }
 }
 ```
-
-`x` をプライベートフィールドにすることで、外部から `x` にアクセスできないようにしなさい。
-
-また、プライベートフィールドのかわりにクロージャを使うことで、外部から `x` にアクセスできないようにしなさい。
 
 **出題範囲**: 9.3.3
 
@@ -72,7 +85,7 @@ class C {
 
 **出題範囲**: 9.5.1
 
-## 問題 9.5
+## 問題 9.5 💻🧪
 
 `instanceof`と等価な関数 `instanceOf(object, constructor)`を作成しなさい。
 関数内部での `instanceof` の利用は不可。
@@ -91,51 +104,72 @@ class C {
 
 **出題範囲**: 9.5.3
 
-## 問題 9.7 💻
+## 問題 9.7 💻📄
 
-継承を使う場合、サブクラスがスーパークラスの実装を引き継ぐため、クラス間の依存性が強くなる。これにより、特に大きい継承ツリーでは、あるクラスの変更がほかのクラスに影響を与えたり、無理にコードを共通化することで、不要な振る舞いや属性を持ったクラスができるという問題がある。
+以下のコードは`SimpleList`を継承して要素のpush回数を記録する`InstrumentedSimpleList`を実装した例である。
+しかし、このコードは想定した通りに動作しない。テストコードで正しく動作していないことを確認しなさい。
+この問題を回避するために、継承のかわりに合成(composition)を用いて`InstrumentedSimpleList`を修正し、テストが通るようにしなさい。
 
-以下は `Animal` クラスを継承して様々な動物クラスを実装する例である。
+```
+export class LinkedList {
+  #head = null;
+  #tail = null;
 
-```ts
-class Animal {
-  eat() {
-    ...
+  constructor() {
+    this.#head = null;
+    this.#tail = null;
+  }
+
+  push(value) {
+    const newNode = { value, next: null };
+    if (!this.#head) {
+      this.#head = newNode;
+      this.#tail = newNode;
+    } else {
+      this.#tail.next = newNode;
+      this.#tail = newNode;
+    }
+  }
+
+  pushAll(...items) {
+    items.forEach((item) => this.push(item));
+  }
+
+  toString() {
+    let current = this.#head;
+    const values = [];
+    while (current) {
+      values.push(current.value);
+      current = current.next;
+    }
+    return "[" + values.join(", ") + "]";
   }
 }
 
-class Dog extends Animal {
-  bite() {
-    ...
+/**
+ * 要素のpush回数を記録するLinkedList
+ */
+export class InstrumentedLinkedList extends LinkedList {
+  #pushCount = 0;
+
+  /**
+   * 要素のpush操作が行われた回数
+   */
+  get pushCount() {
+    return this.#pushCount;
   }
-}
 
-class Husky extends Dog {
-  ...
-}
-
-class Cat extends Animal {
-  scratch() {
-    ...
+  push(item) {
+    super.push(item);
+    this.#pushCount++;
   }
-}
 
-class Bird extends Animal {
-  fly() {
-    ...
-  }
-}
-
-class Fish extends Animal {
-  swim() {
-    ...
+  pushAll(...items) {
+    super.pushAll(...items);
+    this.#pushCount += items.length;
   }
 }
 ```
-
-この例では動物として共通の"食べる"という振る舞い `eat()` を各動物が継承する。ここに"鳴く"という振る舞い `makeSound()` を追加することを考える。犬、猫、鳥は鳴くので `makeSound()` を共通の振る舞いとして利用したいが、スーパークラスに `makeSound()` を追加すると `Fish` は不要な振る舞いを持つことになる。
-
-継承のかわりに合成(composition)を用いてこの問題を回避しなさい。
 
 **出題範囲**: 9.5.3
 
@@ -143,10 +177,11 @@ class Fish extends Animal {
 
 以下の図は、ある目覚まし時計の状態遷移をモデル化した状態遷移図である。
 
-```plantuml
-[*] -> 通常
-通常 -> アラームセット中: アラーム設定
-アラームセット中 -> 通常: アラーム解除
+```mermaid
+stateDiagram-v2
+[*] --> 通常
+通常 --> アラームセット中: アラーム設定
+アラームセット中 --> 通常: アラーム解除
 アラームセット中 --> アラーム鳴動中: アラーム設定時刻到達
 アラーム鳴動中 --> 通常: アラーム解除
 アラーム鳴動中 --> スヌーズ中: スヌーズ
@@ -157,103 +192,122 @@ class Fish extends Animal {
 この状態遷移を管理するコード例として、以下のようなクラスが考えられる。
 `AlarmClock` インスタンスに対して、各イベントに対応するメソッドを呼び出すと、内部で状態遷移が発生し、実行すべきアクションを返り値として返す。
 
-```ts
+```js
 // 目覚まし時計の状態
-type State =
-  | "normal" // 通常
-  | "alarmSet" // アラームセット中
-  | "alarmSounding" // アラーム鳴動中
-  | "snoozing"; // スヌーズ中
+export const State = Object.freeze({
+  NORMAL: Symbol("normal"), // 通常
+  ALARM_SET: Symbol("alarmSet"), // アラームセット中
+  ALARM_SOUNDING: Symbol("alarmSounding"), // アラーム鳴動中
+  SNOOZING: Symbol("snoozing"), // スヌーズ中
+});
 
 // イベント時に発生するアクション
-type Action =
-  | "none" // 何もしない
-  | "soundAlarm" // アラームを鳴らす
-  | "stopAlarm"; // アラームを止める
+export const Action = Object.freeze({
+  NONE: Symbol("none"), // 何もしない
+  SOUND_ALARM: Symbol("soundAlarm"), // アラームを鳴らす
+  STOP_ALARM: Symbol("stopAlarm"), // アラームを止める
+});
+
+// 補足:
+// JavaScript では 列挙型を上記のように記述するが
+// TypeScript では 列挙型を `type Action = "none" | "soundAlarm" | "stopAlarm";` のように代数的データ型を使って記述するのが一般的
 
 // 目覚まし時計クラス
-class AlarmClock {
-  private state: State;
+export class AlarmClock {
+  #state; // private な属性
 
   constructor() {
-    this.state = "normal";
+    this.#state = State.NORMAL;
   }
 
   // アラーム設定イベント
-  setAlarm(): Action {
-    switch (this.state) {
-      case "normal":
-        this.state = "alarmSet";
-        return "none";
+  setAlarm() {
+    switch (this.#state) {
+      case State.NORMAL:
+        this.#state = State.ALARM_SET;
+        return Action.NONE;
       default:
-        return "none";
+        return Action.NONE;
     }
   }
 
   // アラーム解除イベント
-  cancelAlarm(): Action {
-    switch (this.state) {
-      case "alarmSet":
-        this.state = "normal";
-        return "none";
-      case "alarmSounding":
-        this.state = "normal";
-        return "stopAlarm";
-      case "snoozing":
-        this.state = "normal";
-        return "none";
+  cancelAlarm() {
+    switch (this.#state) {
+      case State.ALARM_SET:
+        this.#state = State.NORMAL;
+        return Action.NONE;
+      case State.ALARM_SOUNDING:
+        this.#state = State.NORMAL;
+        return Action.STOP_ALARM;
+      case State.SNOOZING:
+        this.#state = State.NORMAL;
+        return Action.NONE;
       default:
-        return "none";
+        return Action.NONE;
     }
   }
 
   // アラーム設定時刻到達イベント
-  reachedToAlarmTime(): Action {
-    switch (this.state) {
-      case "alarmSet":
-        this.state = "alarmSounding";
-        return "soundAlarm";
+  reachedToAlarmTime() {
+    switch (this.#state) {
+      case State.ALARM_SET:
+        this.#state = State.ALARM_SOUNDING;
+        return Action.SOUND_ALARM;
       default:
-        return "none";
+        return Action.NONE;
     }
   }
 
   // スヌーズイベント
-  snooze(): Action {
-    switch (this.state) {
-      case "alarmSounding":
-        this.state = "snoozing";
-        return "stopAlarm";
+  snooze() {
+    switch (this.#state) {
+      case State.ALARM_SOUNDING:
+        this.#state = State.SNOOZING;
+        return Action.STOP_ALARM;
       default:
-        return "none";
+        return Action.NONE;
     }
   }
 
   // スヌーズ設定時間経過イベント
-  elapseSnoozeTime(): Action {
-    switch (this.state) {
-      case "snoozing":
-        this.state = "alarmSounding";
-        return "soundAlarm";
+  elapseSnoozeTime() {
+    switch (this.#state) {
+      case State.SNOOZING:
+        this.#state = State.ALARM_SOUNDING;
+        return Action.SOUND_ALARM;
       default:
-        return "none";
+        return Action.NONE;
     }
   }
 }
 ```
 
-このコードに対して、すべての状態遷移を網羅するテストを作成することを考える。
+`#state` はプライベートな属性であり、外部から直接値を設定することは避けたい。
+このとき、このコードに対して、すべての状態遷移を網羅するテストを作成することを考える。
 例えば `アラームセット中` の状態から各イベントを受け取ったときのテストを作成するには、事前条件として毎回 `通常` 状態から、`アラーム設定` と `アラーム設定時刻到達` のイベントを経て `アラームセット中` の状態に遷移させる必要がある。
 これを各状態のテストに対して実施するのは煩雑である。
 
-この目覚まし時計の状態遷移モデルのテスト性を向上させるためのアプローチとしてどのような方法があるか考え、それを実装しなさい。
+この目覚まし時計の状態遷移モデルのテスト性を向上させるためのアプローチとして以下のような方法が考えられる。
+
+- GoF の State パターンを利用し、各状態をクラスとして独立させ、各イベントを各状態クラスのメソッドとして実装する
+- 関数型プログラミングを採用し、各イベントに対応した関数を作成し、前回の状態を引数として受けとり、イベントに対して発生するアクションと次の状態のペアを返り値として返す
+
+上記いずれかのアプローチを採用してコードを書き直しなさい。
 また、作成されたコードに対してすべての状態遷移を検査するテストを作成しなさい。
 
 **出題範囲**: -
 
-## 問題 9.9 💪 🖋️ 💻
+## 問題 9.9 🖋️ 💻
 
-オブジェクト指向の設計原則である「SOLID 原則」について説明し、各原則を満たす例と満たさない例のコードを作成しなさい。
-コードは各原則を説明するためのスケルトンコードで良く、実際に動作する必要はない。
+「SOLID 原則」とは、オブジェクト指向の設計原則として従うべき 5 つの原則である。
 
-**出題範囲**: -
+- 単一責任の原則 (single-responsibility principle)
+- 開放閉鎖の原則（open/closed principle）
+- リスコフの置換原則（Liskov substitution principle）
+- インターフェース分離の原則 (Interface segregation principle)
+- 依存性逆転の原則（dependency inversion principle）
+
+1. これら 5 つの原則についてそれぞれ説明しなさい
+2. 5 つの原則から任意の 1 つ以上を選び、原則を満たさないコードと原則を満たすコードの例を書きなさい
+   - コードは各原則を説明するためのスケルトンコードで良く、実際に動作する必要はない

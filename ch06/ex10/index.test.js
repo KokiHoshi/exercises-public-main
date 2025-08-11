@@ -33,11 +33,14 @@ test("ex10", () => {
 
   const answer = {
     // ここにコードを書く
-    num1,
-    num2,
-    foo: obj1.foo,
-    bar: obj3.bar,
-    ...(({ fizz, buzz }) => ({ fizz, buzz }))(obj2),
-    arr: [...arr1, num1, ...arr2],
+    num1, // プロパティ名と変数名が同じときは省略
+    num2, // プロパティ名と変数名が同じときは省略
+    foo: obj1.foo, // obj1 の中の foo を明示的に使いたい、
+    bar: obj3.bar, // obj1.bar と obj3.bar が 異なる値 を持っている
+    ...obj2, //スプレッド可能
+    arr: [...arr1, num1, ...arr2], // 値の順序を保ちながら 6要素の配列を構成
+
   };
+
+  expect(answer).toEqual(obj);
 });

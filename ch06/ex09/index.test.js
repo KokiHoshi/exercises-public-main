@@ -20,3 +20,9 @@ test("ex09", () => {
   expect(JSON.stringify(obj)).toBe(`{"x":1,"y":2,"sum":3}`);
   expect(mock).toHaveBeenCalled();
 });
+
+
+// JSON.stringify() toJSONがあれば呼んで返り値をJSON化
+// toJSON→this.sum()が呼ばれる
+// sum()内でmock()が呼ばれ、2+1=3が返される
+// expect(mock).toHaveBeenCalled() →mock()が呼ばれたことを検証

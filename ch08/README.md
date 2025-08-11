@@ -12,9 +12,30 @@
 
 ## 問題 8.2 💻🧪
 
-べき乗 ($x^n$) を計算する関数を、べき乗演算子 (`**`) を使わずに再帰およびループでぞれぞれ実装しなさい。
+べき乗 ($x^n$) を計算する関数を、べき乗演算子 (`**`) を使わずに [時間計算量](https://atcoder.jp/contests/apg4b/tasks/APG4b_w?lang=ja) が $O(\ln n)$ となるように再帰およびループでぞれぞれ実装しなさい。$n$ は正の整数とする。
 
-可能なら再帰・ループの回数を少なくする工夫をしなさい。
+**ヒント**:
+
+$b^8$ の計算は以下の乗算 3 回で計算可能である:
+
+- $b^8 = b^4 * b^4$
+- $b^4 = b^2 * b^2$
+- $b^2 = b * b$
+
+$b^{11}$ の計算は以下の乗算 5 回で計算可能である:
+
+- $b^{11} = b * b^{10}$
+- $b^{10} = b^5 * b^5$
+- $b^5 = b * b^4$
+- $b^4 = b^2 * b^2$
+- $b^2 = b * b$
+
+これは一般の場合だと以下のように考えられる:
+
+- $b^n = (b^{n/2})^2$ (n が偶数の時)
+- $b^n = b * b^{n - 1}$ (n が奇数の時)
+
+上記のように計算を行えば $b^{2n}$ の計算には $b^n$ の計算と比べて乗算を追加で 1 回しか必要としない。そのため $n$ に対して必要な乗算の数は 2 を底とする $n$ の対数の程度に増加し、時間計算量は $O(\ln n)$ となる。
 
 **出題範囲**: 8.2.1
 
@@ -24,8 +45,8 @@
 
 1. プログラミング言語や処理系によっては、再帰呼び出しを関数の処理の末尾にする(末尾再帰)ことで、スタックオーバーフローが起こらないよう最適化できるものがある。末尾再帰は何故そのような最適化ができるのか答えなさい。
 
-2. JavaScript で末尾再帰最適化を実装している処理系を答えなさい。  
-   利用できる環境があれば、実際に以下の URL を表示・実行してエラーが発生しないことを確認しなさい。  
+2. JavaScript で末尾再帰最適化を実装している処理系を答えなさい。
+   利用できる環境があれば、実際に以下の URL を表示・実行してエラーが発生しないことを確認しなさい。
    https://www.typescriptlang.org/play?#code/GYVwdgxgLglg9mABMAhtOAnGKA2AKMALkTBAFsAjAUwwEpEBvAWAChFlxp4kYoa8ADhjgATENGKlKNADSIIccHwyTy1Oo1bt2MYIjwKlNRAD4S9Zm23sMVKCAxIho8VADcW7QF9PNuw55lQWExaEQAKnlFMGU5QxjjAGpEAEZaDysfK1t7R0RefhS5NIys1gUwAGc4HCoAOhw4AHM8VHQsXDwUgAZe3tp01iA
 
 **出題範囲**: 8.2.1
@@ -67,13 +88,21 @@ obj.om();
 
 ## 問題 8.6 💻
 
-以下の関数の引数を修正しなさい。また、修正した関数をアロー関数に書き直しなさい。
+[MDN](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Functions/arguments) には「ES6 互換のコードを書く場合は、残余引数が推奨されます」とある。しかし、現実には `arguments` を使ったコードは世の中に存在する ([例](https://developers.google.com/analytics/devguides/collection/ga4/event-parameters))。
+
+そのような関数を書き直す練習として、以下の関数 `call` を `arguments` を使わないように書き直しなさい。
 
 ```js
-const m = function (arg) {
-  console.log(arg[1]);
-};
-m("a", "b");
+const args = [];
+function call() {
+  args.push(Array.from(arguments));
+}
+
+call(1, 2, 3);
+call("A", "B");
+
+console.log(args[0]); // [1, 2, 3]
+console.log(args[1]); // ["A", "B"]
 ```
 
 **出題範囲**: 8.3.2
@@ -130,6 +159,26 @@ withResource(new Resource(), resource => {
 
 関数を引数に受け取り、 call 相当の動きをするプロパティ myCall を追加する関数 addMyCall(f)を実装しなさい。実装には bind を使い call や apply は使わないこと
 
+```js
+// 例
+const sqaure = (n) => n * n;
+
+addMyCall(square);
+
+console.log(sqaure.myCall(null, 5)); // 25
+
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
+}
+
+addMyCall(Product);
+
+const that = {};
+Product.myCall(that, "Apple", 100);
+console.log(that); // { name: 'Apple', price: 100 }
+```
+
 **出題範囲**: 8.7.4, 8.7.5
 
 ## 問題 8.11 🖋️
@@ -140,7 +189,7 @@ withResource(new Resource(), resource => {
 
 ## 問題 8.12 💻📄
 
-プログラミング言語によっては無名関数の引数名を省略し、短く書けるものがある。  
+プログラミング言語によっては無名関数の引数名を省略し、短く書けるものがある。
 例えば以下のような処理の場合、 `(a, b) => a + b` 相当の無名関数を、 Swift では `{ $0 + $1 }` 、 Elixir では `&(&1 + &2)` のように書ける。
 
 ```js
@@ -160,7 +209,7 @@ console.log(arr.sort(f("$1 - $2")));
 
 **出題範囲**: 8.7.7
 
-## 問題 8.13 🖋(💻)
+## 問題 8.13 🖋💻
 
 以下のコードが Web サービスの一部で使われており、引数の `input` には Web サービスの利用者が入力した文字列が渡されるものとする。
 
@@ -172,7 +221,7 @@ function f(input) {
 ```
 
 このコードには重大な問題が含まれている。何が問題と考えられるか記述しなさい。
-可能なら問題を実証できるコードも記載しなさい。
+また問題を実証できるコードも記載しなさい。
 
 **出題範囲**: 8.7.7
 
@@ -205,15 +254,3 @@ console.log(safeJsonParse("{Invalid Json}")); // => {error: "SyntaxError: ..."}
 ```
 
 **出題範囲**: 8.8.2
-
-## 問題 8.15 💪💻
-
-メジャーなフロントエンドライブラリである React 利用の上級者を目指すチュートリアルとして、[Build Your Own React](https://pomb.us/build-your-own-react/)がある。あるライブラリ利用の上級者を目指して本質的な理解を深めるための学習方法として、ライブラリと同等の機能を実装するという方法があるが、このチュートリアルではそのような体験ができる。本チュートリアルを通して React が強く関数型プログラミングの考え方を導入していることを実感できる。
-
-Build Your Own React では簡素化した React の実装を 300 行ほどのファイルとして書く。本章までの JavaScript の知識や関数型プログラミングの考え方と、(書籍では 15 章の情報である)基礎的な DOM 操作 API の知識があれば文法上は理解できる。ただし、一般に広く使われるライブラリの実装は難易度が高い(低かったら保守性等から自分で実装したほうが早いという判断になる)ものであり、本チュートリアルが説明している概念も簡単なものではない。
-
-チュートリアルを完了すると完成する成果物 https://github.com/pomber/didact に対して、メモ化の機能を持つフックである [useMemo](https://ja.react.dev/reference/react/useMemo) を追加しなさい。
-
-なお、./ex15 で `npm install && npm start` すると https://github.com/pomber/didact の didact.js がトランスパイルされて http://localhost:5000/index.html で動作確認できるようになっている。
-
-**出題範囲**: 8.8.4、**15.1.2**
