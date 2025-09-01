@@ -13,7 +13,7 @@ describe("counterGroup", () => {
     });
 
     describe("#reset", () => {
-      test("It resets incrementedd value", () => {
+      test("It resets incremented value", () => {
         const cg = counterGroup();
         const counter = cg.newCounter();
         expect(counter.count()).toBe(0);
@@ -95,11 +95,9 @@ describe("counterGroup", () => {
       expect(cg.variance()).toBe(0.25);
       const c3 = cg.newCounter();
       c3.count();
-      expect(cg.variance()).toBeLessThan(0.67); // 0.66666.....
-      expect(cg.variance()).toBeGreaterThan(0.66);
+      expect(cg.variance()).toBeCloseTo(2/3, 10); 
       c1.reset();
-      expect(cg.variance()).toBeLessThan(0.67); // 0.66666.....
-      expect(cg.variance()).toBeGreaterThan(0.66);
+      expect(cg.variance()).toBeCloseTo(2/3, 10);
     });
   });
 
