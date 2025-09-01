@@ -13,7 +13,7 @@ import {
     { name: 'elapseSnoozeTime', fn: elapseSnoozeTime },
   ];
   
-  // 期待遷移表（状態 × イベント → {action, state}）
+  // 遷移表（状態 × イベント → {action, state}）
   const T = {
     [State.NORMAL]: {
       setAlarm:           { action: Action.NONE,        state: State.ALARM_SET },

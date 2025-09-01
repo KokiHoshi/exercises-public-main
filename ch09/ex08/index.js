@@ -68,8 +68,6 @@ export const State = Object.freeze({
     }
   };
   
-  // ---（任意）元のクラス風に使いたい人向けの薄いラッパー ---
-  // 内部では純関数を使うので、テストは純関数に対して網羅的に書ける。
   export class AlarmClock {
     #state = State.NORMAL;
     get state() { return this.#state; }
