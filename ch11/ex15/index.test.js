@@ -1,4 +1,4 @@
-import { modifyUrl } from "./index.ts";
+import { modifyUrl } from "./index.js";
 
 describe("modifyUrl", () => {
   it("returns URL string", () => {

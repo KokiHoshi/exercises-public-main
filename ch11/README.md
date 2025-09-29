@@ -1,6 +1,7 @@
 # 練習問題: 11 章
 
 ## 問題 11.1 💻🧪
+
 以下のような動作を実現する、 `TypeMap` クラスを作成しなさい。
 
 ```js
@@ -18,14 +19,14 @@ typeMap.get(Number); // -> 123
 
 - `Map` と同様のインタフェース(`get`, `set`)を持つ。ただし、`key` はコンストラクタ関数に限定する
 - `set` では、 コンストラクタ関数の `key` と そのクラスの `value` のみ受け付け、それ以外の値が渡された場合はエラーとする。これにより、`get` で取得する値が `key` に指定したコンストラクタ関数のクラスであることを保証する。
-  - TypeScriptの場合はそのような `key`, `value` の型定義とする
+  - TypeScript の場合はそのような `key`, `value` の型定義とする
 - プリミティブ値は、ラッパークラスのコンストラクタ関数で `get`/`set` 可能とする
 
 **出題範囲**: 11.1
 
 ## 問題 11.2 💻🧪
 
-オブジェクトを1つ引数に取り、何らかの時間のかかる計算を行い、与えられた引数に対して一意な結果を返す関数`slowFn`を考える。`slowFn`の計算結果をキャッシュし、同じ引数で繰り返し呼び出された時にはキャッシュを返す関数`cachedSlowFn`を生成する関数`cache`を実装しなさい。ただし`slowFn`の引数のオブジェクトが到達不能になった場合には、キャッシュがガベージコレクションの対象になるように実装しなさい。また`slowFn`は任意の実装で良い。
+オブジェクトを 1 つ引数に取り、何らかの時間のかかる計算を行い、与えられた引数に対して一意な結果を返す関数`slowFn`を考える。`slowFn`の計算結果をキャッシュし、同じ引数で繰り返し呼び出された時にはキャッシュを返す関数`cachedSlowFn`を生成する関数`cache`を実装しなさい。ただし`slowFn`の引数のオブジェクトが到達不能になった場合には、キャッシュがガベージコレクションの対象になるように実装しなさい。また`slowFn`は任意の実装で良い。
 
 ```js
 // f はオブジェクトを1つ引数に取る関数
@@ -72,9 +73,11 @@ ch11/ex04/index.js の実装を完成させ型付き配列と通常の配列で�
 
 **出題範囲**: 11.2
 
-## 問題 11.6 💻📄
+## 問題 11.6 💻📄🖋️
 
-与えられた文字列がメールアドレスであるかチェックする関数`isEmailAddress`を実装しなさい。ただしRFC5322に準拠したメールアドレスの判定は難しいので、与えられたテストコードが通ればよいものとする。
+与えられた文字列がメールアドレスであるかチェックする関数`isEmailAddress`を実装しなさい。ただし RFC5322 に準拠したメールアドレスの判定は難しいので、与えられたテストコードが通ればよいものとする。
+
+またメールアドレスの正規表現として一般的には何を使うのが良いと考えられるか調べて記述しなさい。
 
 **出題範囲**: 11.3
 
@@ -101,15 +104,16 @@ ch11/ex04/index.js の実装を完成させ型付き配列と通常の配列で�
 
 正規表現の処理には予想以上に時間がかかる可能性がある。
 
-例えば利用者によって `^(a|aa)+$` といった文字列が入力されたと考えよう。
+例えば、利用者が正規表現を入力して何か検索を行うことが出来るサービスを開発したとする。
+リリース後、とある利用者によって `^(a|aa)+$` といった文字列が入力されたと考えよう。
 この正規表現が `"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!"` といった文字列にマッチするか調べようとするとどうなるだろうか。
 
 **出題範囲**: 11.3
 
 ## 問題 11.9 💪💻📄
 
-正規表現は魔法ではない。簡単な正規表現のエンジンを書いてみよう。ch11/ex09/index.js を完成させなさい。
-ここでは `/([Jj]ava([Ss]cript)?) is fun/` という正規表現を以下のような JavaScript の式で表現するものとする:
+正規表現は魔法ではない。簡単な正規表現のエンジンを書いてみよう。
+ここでは `/([Jj]ava([Ss]cript)?) is fun/` という正規表現を以下のような JavaScript の式で表現するものとする。
 
 ```js
 const p = seq(
@@ -120,7 +124,96 @@ const p = seq(
   ),
   quote(" is fun")
 );
+
+console.log(match(p, "JavaScript is fun")); // => true
+console.log(match(p, "Ruby is fun")); // => false
 ```
+
+このように一般的なプログラミング言語の構文や機能を活用して、特定の問題領域に特化した記述ができるよう設計されたコードを [内部 DSL](https://ja.wikipedia.org/wiki/%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E5%9B%BA%E6%9C%89%E8%A8%80%E8%AA%9E) と呼ぶ。
+上記 DSL を実現するコードの例として以下のような実装が考えられる:
+
+````js
+// 正規表現のパターンを関数として表現する (以下 "パターン関数" と呼ぶ)。
+// 例えば "HELLO" という文字列にマッチする正規表現は quote 関数を利用して以下のように作成する。
+// ```
+// const pattern = quote("HELLO");
+// ```
+//
+// パターン関数は以下の2つを引数として受け取る:
+//
+// - 文字列: パターンがマッチするか調査する文字列
+// - インデックス: 文字列の何文字目からパターンのマッチを判定するかを示す整数
+//
+// パターン関数は引数に対して自身がマッチした場合は成功なら次の位置、失敗なら null を返す
+// 以下の `Pattern` は TypeScript の型でパターン関数を記述したものである:
+//
+// ```
+// type Pattern = (s: string, index: number) => number | null;
+// ```
+//
+// 以下に簡単な例を示す:
+//
+// ```
+// const p = quote("HELLO");
+// console.log(p("HELLOWORLD", 0)); // 5
+// console.log(p("FOO", 0)); // null
+// console.log(p("FOOHELLOWORLD", 3)); // 8
+// ```
+
+const quote = (lit) => (s, i) => s.startsWith(lit, i) ? i + lit.length : null;
+const seq2 = (a, b) => (s, i) => {
+  const j = a(s, i);
+  return j === null ? null : b(s, j);
+};
+const alt2 = (a, b) => (s, i) => a(s, i) ?? b(s, i);
+const seq = (...ps) => ps.reduce(seq2);
+const alt = (...ps) => ps.reduce(alt2);
+const dot = () => (s, i) => i < s.length ? i + 1 : null;
+const charFrom = (chars) => (str, pos) =>
+  pos < str.length && chars.includes(str[pos]) ? pos + 1 : null;
+
+const repeat =
+  (p, min = 0, max = Infinity) =>
+  (s, i) => {
+    let pos = i;
+    let count = 0;
+    while (count < min) {
+      const n = p(s, pos);
+      if (n === null) {
+        return null;
+      }
+      pos = n;
+      count++;
+    }
+    while (count < max) {
+      const n = p(s, pos);
+      if (n === null) {
+        break;
+      }
+      pos = n;
+      count++;
+    }
+    return pos;
+  };
+
+const match = (p, s) => p(s, 0) === s.length;
+````
+
+わずか数十行で正規表現のようなものが実装できる。しかし上記の実装には以下の問題がある:
+
+```js
+console.log(/(a|ab)c/g.test("abc")); // true
+
+// 上記の正規表現に対応したコード
+const p = seq(alt(quote("a"), quote("ab")), quote("c"));
+console.log(match(p, "abc")); // false
+```
+
+正規表現にはパターンマッチ中に複数の候補から 1 つを選び、もし失敗したら前に戻って別の候補を試すという機能 (バックトラック) がある。
+上記の実装ではバックトラックを備えておらず、`(a|ab)` に関して `a` にマッチした場合、後続のパターンがマッチしない時に `ab` を試さないことが問題である。
+
+そこでバックトラックを備えた簡単な正規表現エンジンを [継続渡しスタイル](https://ja.wikipedia.org/wiki/%E7%B6%99%E7%B6%9A%E6%B8%A1%E3%81%97%E3%82%B9%E3%82%BF%E3%82%A4%E3%83%AB) で実装しよう。
+ch11/ex09/index.js の続きを完成させなさい。
 
 **出題範囲**: 11.3
 
@@ -159,16 +252,9 @@ ch11/ex11/index.js は `"Hello".length` にどれだけの時間がかかるか�
 
 **出題範囲**: 11.5
 
-## 問題 11.13 💪💻📄
+## 問題 11.13 💻📄
 
-`JSON.parse` を自作した `parseJSON` 関数を作成しなさい。第二引数の `reviver` には対応しなくて良いものとする。
-
-JSON の構文に関しては MDN の [JSON の完全な構文](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/JSON#json_%E3%81%AE%E5%AE%8C%E5%85%A8%E3%81%AA%E6%A7%8B%E6%96%87) を参考にしなさい。
-
-問題を簡単にするために JSON の仕様を全て満たさずに一部を未対応としても良い。
-その場合はどの仕様を未対応としたか記載すること。また未対応にした仕様に関するテストコードはコメントアウトしておくこと
-
-**注意**: パーサーをどう書けばいいか分からない人向けに途中まで実装したサンプルを用意した。ch11/ex13/index.js を参照。必ずしもサンプルを利用しなくても良い。
+`JSON.stringify` を自作した `stringifyJSON` 関数を作成しなさい。第二引数と第三引数には対応しなくて良いものとする。
 
 **出題範囲**: 11.6
 
@@ -183,7 +269,7 @@ JSON の構文に関しては MDN の [JSON の完全な構文](https://develope
 
 ## 問題 11.15 💻📄
 
-ベースのURL`base`、追加するクエリ`addQuery`、パス`path`を持つオブジェクトを引数に取り、ベースのURLのパスとクエリを修正した文字列を返す関数`modifyUrl`を実装しなさい。
+ベースの URL`base`、追加するクエリ`additionalQuery`、パス`path`を持つオブジェクトを引数に取り、ベースの URL のパスとクエリを修正した文字列を返す関数`modifyUrl`を実装しなさい。
 
 **出題範囲**: 11.9
 
@@ -195,11 +281,12 @@ JSON の構文に関しては MDN の [JSON の完全な構文](https://develope
 function retryWithExponentialBackoff(func, maxRetry, callback)
 ```
 
-- 受け取った関数 `func` を呼び出し、funcがtrueを返せばそこで終了する
+- 受け取った関数 `func` を呼び出し、func が true を返せばそこで終了する
 - `func` が `false` を返した場合は以下の待ち時間後に `func` 呼び出しをリトライする
-- 待ち時間は`func`の呼び出し回数に応じて1秒, 2秒, 4秒, ...と2倍に増えていく
+- 待ち時間は`func`の呼び出し回数に応じて 1 秒, 2 秒, 4 秒, ...と 2 倍に増えていく
 - `maxRetry` 回リトライしても成功しない場合はそこで終了する
 - `retryWithExponentialBackoff`に対する呼び出しは即座に完了し、`func` の呼び出しは非同期に行われる
-- `func` が `true` を返す、またはmaxRetry回のリトライが失敗し終了する際、その結果(`true`/`false`)を引数として関数 `callback` が呼び出される
+- `func` が `true` を返す、または maxRetry 回のリトライが失敗し終了する際、その結果(`true`/`false`)を引数として関数 `callback` が呼び出される
 
 **出題範囲**: 11.10
+
