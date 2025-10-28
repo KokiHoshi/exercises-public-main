@@ -1,4 +1,4 @@
-import { add as plus, Calculator as Calc, Greeter } from "./math.mjs";
+import { add as plus, Calculator as Calc, Greeter } from "./math.js";
 
 console.log(plus(2, 3)); // 5
 const calc = new Calc();

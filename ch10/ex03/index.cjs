@@ -1,8 +1,8 @@
-function add(a, b) {
+export function add(a, b) {
   return a + b;
 }
 
-class Calculator {
+export class Calculator {
   multiply(a, b) {
     return a * b;
   }
