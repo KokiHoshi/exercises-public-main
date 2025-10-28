@@ -10,4 +10,4 @@ export class Calculator {
   }
 }
 
-export { default as Greeter } from "./util.js";
+export { default as Greeter } from "./util.mjs";

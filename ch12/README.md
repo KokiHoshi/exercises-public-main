@@ -1,15 +1,8 @@
 # 練習問題: 12 章
 
-## 問題 12.1 💻
+## 問題 12.1 💻🖋️
 
-以下の関数 `counterIter()` 及び `counterGen()` を利用して、イテレータ及びジェネレータに対して、どのような操作をした時にどの部分が実行されるのか、動作を確認しなさい。
-
-例
-
-- 明示的に[イテレータインタフェース](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iteration) のメソッドを呼んだり、間接的に呼んだりする
-- ジェネレータ関数によって生成されたオブジェクトが[イテレータインタフェース](https://tc39.es/ecma262/multipage/control-abstraction-objects.html#sec-iteration)を満たしていることを確認する
-- `return()` や `throw()` がどのようなときに呼ばれるのか確認する
-- ジェネレータ関数の中身がどのタイミングで初めて実行されるか確認する
+以下のコードに示す関数 `counterIter()` 及び `counterGen()` を利用して、イテレータ及びジェネレータに対して「調査対象の操作」に示す操作をしたときに、どの部分が実行されるのかを調査するコードを作成し、実行結果と動作の説明を記述しなさい
 
 ```js
 function counterIter(max) {
@@ -53,7 +46,17 @@ function* counterGen(max) {
   } finally {
     console.log("counterGen: finally");
   }
+}
 ```
+
+調査対象の操作
+
+- 明示的に[イテレータプロトコル](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Iteration_protocols)の next() を呼び出す
+- 明示的に[イテレータプロトコル](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Iteration_protocols)の return() を呼び出す
+- 明示的に[イテレータプロトコル](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Iteration_protocols)の throw() を呼び出す
+- for-of ループを実行
+- for-of ループを実行途中で break
+- for-of ループを実行中に例外発生
 
 **出題範囲**: 全体
 
@@ -73,11 +76,9 @@ P.372 で例示されている、`throw()`を使ってリセットを行うカ�
 
 値が必要になるまで実際の計算を行わない評価戦略を遅延評価と呼ぶ。ジェネレータ関数は`next()`が呼ばれるまで評価が遅延される関数と考えることができる。遅延評価を行うことで、例えば素数のような無限に続く値を扱うことができる。
 
-呼び出しごとに素数を順番に返す無限ジェネレータ `primes()` を実装しなさい。素数を計算するアルゴリズムとしてエラトステネスの篩[^1]を使いなさい。
+呼び出しごとに素数を順番に返す無限ジェネレータ `primes()` を実装しなさい。
 
 ヒント: P363 の `filter()` 関数と整数列を返すジェネレータを組み合わせることで、素数の倍数をふるい落とす再帰ジェネレータを作成し、内部に配列を保持することなくアルゴリズムを実現できる
-
-[^1]: `https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%A9%E3%83%88%E3%82%B9%E3%83%86%E3%83%8D%E3%82%B9%E3%81%AE%E7%AF%A9`
 
 **出題範囲**: 12.3
 
