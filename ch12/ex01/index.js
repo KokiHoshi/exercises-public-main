@@ -43,7 +43,8 @@ function* counterGen(max) {
 
 const bar = (t) => console.log("\n---------------------\n" + t);
 
-// イテレータ
+/* ========== イテレータ ========== */
+
 // next()
 bar("イテレータ: next()");
 {
@@ -51,7 +52,7 @@ bar("イテレータ: next()");
   console.log(it.next());
   console.log(it.next());
   console.log(it.next());
-  console.log(it.next());
+  console.log(it.next()); // done: true
 }
 
 // return()
@@ -60,6 +61,7 @@ bar("イテレータ: return()");
   const it = counterIter(3);
   console.log(it.next());
   console.log(it.return("終了"));
+  console.log(it.next());
 }
 
 // throw()
@@ -81,8 +83,8 @@ bar("イテレータ: for-of");
   }
 }
 
-// イテレータ: for-of 途中でbreak
-bar("イテレータ: for-of 途中でbreak");
+// for-of: 途中で break
+bar("イテレータ: for-of 途中で break");
 {
   for (const v of counterIter(5)) {
     console.log("body:", v);
@@ -90,7 +92,8 @@ bar("イテレータ: for-of 途中でbreak");
   }
 }
 
-// イテレータ: for-of 中に例外
+// for-of: ループ中に例外
+bar("イテレータ: for-of 中に例外");
 {
   try {
     for (const v of counterIter(5)) {
@@ -102,9 +105,10 @@ bar("イテレータ: for-of 途中でbreak");
   }
 }
 
-// ジェネレータ
+/* ========== ジェネレータ ========== */
+
 // next()
-bar("イテレータ: next()");
+bar("ジェネレータ: next()");
 {
   const gen = counterGen(3);
   console.log(gen.next());
@@ -114,15 +118,16 @@ bar("イテレータ: next()");
 }
 
 // return()
-bar("イテレータ: return()");
+bar("ジェネレータ: return()");
 {
   const gen = counterGen(3);
   console.log(gen.next());
   console.log(gen.return("終了"));
+  console.log(gen.next());
 }
 
 // throw()
-bar("イテレータ: throw()");
+bar("ジェネレータ: throw()");
 {
   const gen = counterGen(3);
   console.log(gen.next());
@@ -134,15 +139,15 @@ bar("イテレータ: throw()");
 }
 
 // for-of
-bar("イテレータ: for-of");
+bar("ジェネレータ: for-of");
 {
   for (const v of counterGen(3)) {
     console.log("body:", v);
   }
 }
 
-// イテレータ: for-of 途中でbreak
-bar("イテレータ: for-of 途中でbreak");
+// for-of: 途中で break
+bar("ジェネレータ: for-of 途中で break");
 {
   for (const v of counterGen(5)) {
     console.log("body:", v);
@@ -150,7 +155,8 @@ bar("イテレータ: for-of 途中でbreak");
   }
 }
 
-// イテレータ: for-of 中に例外
+// for-of: ループ中に例外
+bar("ジェネレータ: for-of 中に例外");
 {
   try {
     for (const v of counterGen(5)) {
