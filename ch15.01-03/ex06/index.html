@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>セキュリティ警告</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./index.js" defer></script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #111;
+        color: #eee;
+        margin: 0;
+      }
+
+      /* ← 左右サイド警告バー → */
+      .side-warning {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 80px;
+        background: linear-gradient(#900, #f00);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        font-weight: bold;
+        font-size: 18px;
+        text-shadow: 0 0 10px black;
+        animation: blink 1.2s linear infinite;
+        z-index: 1000;
+      }
+      .side-left {
+        left: 0;
+      }
+      .side-right {
+        right: 0;
+      }
+
+      /* 点滅 */
+      @keyframes blink {
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* 中央コンテンツ */
+      header {
+        margin-left: 100px;
+        margin-right: 100px;
+        background: linear-gradient(90deg, #800000, #ff0000);
+        padding: 16px;
+        text-align: center;
+        color: white;
+      }
+
+      main {
+        margin: 24px auto;
+        margin-left: 140px;
+        margin-right: 140px;
+        padding: 20px;
+        max-width: 800px;
+        background: #1d1d1d;
+        border: 2px solid #f00;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        border: 1px solid #444;
+        padding: 6px;
+      }
+
+      th {
+        background: #333;
+        width: 40%;
+      }
+
+      td {
+        background: #181818;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- 左右の詐欺風警告サイドバー -->
+    <div class="side-warning side-left">⚠ 緊急警告 ⚠</div>
+    <div class="side-warning side-right">⚠ 情報漏洩の恐れ ⚠</div>
+
+    <header>
+      <h1>緊急セキュリティ警告</h1>
+      <p class="blink">あなたのデバイス情報が監視されています！</p>
+    </header>
+
+    <main>
+      <div class="alert">▼ 検出されたシステム情報</div>
+
+      <table id="info-table">
+        <tbody></tbody>
+      </table>
+    </main>
+  </body>
+</html>

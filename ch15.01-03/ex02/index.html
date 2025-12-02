@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dynamic Import Test</title>
+  </head>
+  <body>
+    <h1>動的 import のテスト</h1>
+    <p>この文字が赤色になれば成功です。</p>
+
+    <script type="module">
+      async function main() {
+        const { $ } = await import(
+          "https://releases.jquery.com/git/jquery-git.module.min.js"
+        );
+        $("*").css("color", "red");
+      }
+
+      main();
+    </script>
+  </body>
+</html>

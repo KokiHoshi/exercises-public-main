@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 function gotoTestTarget(page) {
-  return page.goto("/ch15.01-03/ex10/index.html");
+  return page.goto("http://localhost:3000/ch15.01-03/ex10/index.html");
 }
 
 function getDiv(page) {
@@ -45,7 +45,9 @@ test.describe("div & input Site", () => {
     await expect(getDiv(page)).toHaveText("Hello!");
   });
 
-  test("When it input dangerous texts, then the div displays sanitiezed texts", async ({ page }) => {
+  test("When it input dangerous texts, then the div displays sanitiezed texts", async ({
+    page,
+  }) => {
     await gotoTestTarget(page);
     await getInput(page).fill("<div>Hello!</div>");
     await expect(getDiv(page)).toHaveText("<div>Hello!</div>");

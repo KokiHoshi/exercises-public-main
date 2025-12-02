@@ -25,7 +25,7 @@
 
 ## 問題 14.4 💻🧪
 
-ひらがな 1 文字とその UTF-16 コード単位をプロパティとしてもつ独自クラスを、50 音順(UTF-16 コード単位順)で<や>で比較、ソートできるようSymbol.toPrimitiveを用いて実装し、テストコードを書きなさい。
+ひらがな 1 文字とその UTF-16 コード単位をプロパティとしてもつ独自クラスを、50 音順(UTF-16 コード単位順)で<や>で比較、ソートできるよう Symbol.toPrimitive を用いて実装し、テストコードを書きなさい。
 文字列が期待される場合にはひらがなを、数字が期待される場合には UTF-16 コード単位を、どちらでもない場合にはひらがなを返すようにし、テストコードで確認しなさい。
 
 **出題範囲**: 14.4.7
@@ -34,9 +34,15 @@
 
 テンプレートリテラルを受けとり文字列を返す関数を作成しなさい。ただし戻り値において補間値はその値ではなく、その型名を展開しなさい。（厳密な型でなくて可）
 
-- 例)
-  - `` `${"A"}` `` -> `"string"`
-  - `` `${{ x: 1 }}` `` -> `"object"`
+```js
+// NOTE: 以下の例では template という関数を作成したものとしている:
+
+console.log(template``); // ""
+console.log(template`test`); // "test"
+console.log(template`Hello, ${"A"}`); // "Hello, string"
+console.log(template`${1} ${null} ${() => {}}`); // "number object function"
+console.log(template`type of 'A' is ${"A"}`); // "type of 'A' is string"
+```
 
 **出題範囲**: 14.5
 
@@ -50,5 +56,23 @@
   - メソッド名
   - パラメータ(引数)
 - Proxy と 配列 双方への参照を返却する
+
+```js
+// NOTE: 以下の例では makeProxyAndLogs という関数を作成したものとしている:
+
+const a = {
+  p: 1,
+  f: (x: number, y: number) => {
+    return x + y;
+  },
+};
+
+const [proxy, logs] = makeProxyAndLogs(a);
+
+console.log(logs); // []
+console.log(proxy.p); // 1
+console.log(proxy.f(1, 2)); // 3
+console.log(logs); // [{ name: "c", args: [1, 2], timestamp: ... }]
+```
 
 **出題範囲**: 14.6

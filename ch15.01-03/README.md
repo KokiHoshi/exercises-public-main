@@ -9,7 +9,7 @@
 このアプリケーションを利用すると以下のような HTML ドキュメントがブラウザに表示されることが期待されます。
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <title>Simple ToDo</title>
@@ -52,9 +52,17 @@
 
 ## 問題 15.1-3.2 💻🖋️
 
-ブラウザで動的なスクリプトの[インポート](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/import) (`await import(url)`) できる環境を構築して動作確認しなさい (可能ならば cross-site にしなさい)。
+ブラウザで動的なスクリプトの[インポート](https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Operators/import) (`await import(url)`) が出来ることを試しなさい。
 
+適当な HTML ページを作成し、その中で以下のコードを実行してページ内のテキストの色が赤になることを確認しなさい。
 またその動作確認方法を文書で記述しなさい。
+
+```js
+const { $ } = await import(
+  "https://releases.jquery.com/git/jquery-git.module.min.js"
+);
+$("*").css("color", "red");
+```
 
 **出題範囲 15.1.1.4**
 
@@ -66,10 +74,9 @@
 
 ## 問題 15.1-3.4 🖋
 
-グローバルオブジェクトを参照する方法を、ブラウザ内、node内、ブラウザnode問わずの３種記しなさい。<br>
-また、ブラウザとnodeのグローバルオブジェクトのプロパティやメソッドを比較し、ブラウザ独自のものを10程度記しなさい。<br>
-最後に、グローバルオブジェクトにundefinedが定義されていることを確認し、過去のES仕様でどのような問題が発生していたかを記しなさい。
-
+グローバルオブジェクトを参照する方法を、ブラウザ内、node 内、ブラウザ node 問わずの３種記しなさい。<br>
+また、ブラウザと node のグローバルオブジェクトのプロパティやメソッドを比較し、ブラウザ独自のものを 10 程度記しなさい。<br>
+最後に、グローバルオブジェクトに undefined が定義されていることを確認し、過去の ES 仕様でどのような問題が発生していたかを記しなさい。
 
 **出題範囲 15.1.3**
 
@@ -98,25 +105,28 @@ navigator から取得できる要素をページ中に描画して詐欺サイ�
 
 ## 問題 15.1-3.7 🖋
 
-自分が運営する販売サイトにYouTubeのトップページをiframeで組込み、更に自作のscript.jsによりiframe内のデータを分析しようとしています。
+自分が運営する販売サイトに YouTube のトップページを iframe で組込み、更に自作の script.js により iframe 内のデータを分析しようとしています。
 
 ```html
 <iframe id="other" src="https://www.youtube.com/"></iframe>
 <script src="./script.js"></script>
 ...
 ```
+
 ```js
-(async () => {
+async () => {
   // YouTube が利用者に推薦する動画タイトルを取得すれば、利用者に最適な商品セットを表示できるのではないか？
-  const titles = document.getElementById("").contentWindowquerySelectorAll('#video-title');
+  const titles = document
+    .getElementById("other")
+    .contentWindowquerySelectorAll("#video-title");
   for (const t of titles) {
-    await fetch("your-server-path", { method: "POST", body: t.textContent })
+    await fetch("your-server-path", { method: "POST", body: t.textContent });
   }
-});
+};
 ```
 
 しかし、トップページを読み込むとエラーになります。用語「クリックジャッキング」を調べて理由を説明しなさい。<br>
-また、script.jsも動作しません。ここで、同一オリジンポリシーがなく、iframe内の他サイトのDOM変更が可能な仕様を想定し、どのような重大な問題が発生しうるか記載しなさい。
+また、script.js も動作しません。ここで、同一オリジンポリシーがなく、iframe 内の他サイトの DOM 変更が可能な仕様を想定し、どのような重大な問題が発生しうるか記載しなさい。
 
 **出題範囲 15.1.8.2**
 
@@ -126,7 +136,8 @@ navigator から取得できる要素をページ中に描画して詐欺サイ�
 ブラウザから http://localhost:3000/ch15.01-03/ex08 にアクセスすることで index.html を開けます。
 index.html は data.json の値を参照しています。
 
-何者かにサーバーに侵入され data.json が改ざんされた可能性があるとします。攻撃者はどのような data.json の改ざんを行ったでしょうか。実際に XSS が発生する data.json に書き換えなさい。
+この data.json を外部から書き換える手段が存在した場合、脆弱性となります。
+実際に XSS が発生する data.json に書き換えなさい。
 
 **出題範囲 15.1.8.3**
 
@@ -148,11 +159,10 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
 
 ## 問題 15.1-3.11 💻
 
-以下のhtmlを開き、ボタン押下時のコンソール出力結果を確認しなさい。<br>
-次にcaptureの値を変更しdivとbuttonのコンソール出力順序が逆になることを確認しなさい。<br>
-更にscript中のコメント1.～4.の指示に従いカスタムイベントの関連コードを完成させなさい。<br>
-最後にブラウザのデバッグツール(Chromeの場合はDeveloper ToolのEvent Listners)で、btn等に登録されているイベントをそれぞれ確認しなさい。
-
+以下の html を開き、ボタン押下時のコンソール出力結果を確認しなさい。<br>
+次に capture の値を変更し div と button のコンソール出力順序が逆になることを確認しなさい。<br>
+更に script 中のコメント 1.～ 4.の指示に従いカスタムイベントの関連コードを完成させなさい。<br>
+最後にブラウザのデバッグツール(Chrome の場合は Developer Tool の Event Listners)で、btn 等に登録されているイベントをそれぞれ確認しなさい。
 
 ```html
 <!doctype html>
@@ -169,7 +179,7 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
         () => {
           console.log("div");
         },
-        { capture: true },
+        { capture: true }
       );
       btn.addEventListener("click", () => {
         console.log("button");
@@ -199,7 +209,6 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
       // 3. ボタンにイベントリスナを追加し、ボタン押下するごとに乱数値を変更しなさい。変更にはRandomEventTargetのtriggerメソッドを利用しなさい。
 
       // 4. RandomEventTargetのtriggerメソッドによってイベントを発生させて、ページ読み込み時に乱数値を表示しなさい。
-
     </script>
   </head>
   <body>
@@ -208,9 +217,7 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
     </div>
   </body>
 </html>
-
 ```
-
 
 **出題範囲 15.2.1/15.2.4**
 
@@ -225,7 +232,6 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
 
 ブックマークレットの案:
 
-- 交通費精算の入力を省力化する
 - 勤怠の入力を省力化する
 - Chrome 内蔵の Gemini nano を使って選択範囲のテキストを要約する
 

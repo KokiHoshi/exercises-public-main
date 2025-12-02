@@ -46,7 +46,7 @@ function queryToDo(page, index) {
 
 test.describe("simple todo app", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/ch15.01-03/ex01");
+    await page.goto("http://localhost:3000/ch15.01-03/ex01/"); // テストが通らなかったのでフルパスに変更
   });
 
   test("no default todos", async ({ page }) => {

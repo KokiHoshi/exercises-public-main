@@ -1,5 +1,13 @@
 export class MyArrayLike {
-  // TODO
+  constructor(length = 0) {
+    this.length = length;
+  }
+
+  *[Symbol.iterator]() {
+    for (let i = 0; i < this.length; i++) {
+      yield this[i];
+    }
+  }
 }
 
 export class MyArray extends Array {
@@ -7,5 +15,7 @@ export class MyArray extends Array {
     super(...items);
   }
 
-  // TODO
+  static get [Symbol.species]() {
+    return MyArrayLike;
+  }
 }

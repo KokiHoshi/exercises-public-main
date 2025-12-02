@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Integrity Test</title>
+  </head>
+  <body>
+    <h1>Subresource Integrity（SRI）テスト</h1>
+
+    <p>以下の script タグの integrity を正しく設定 → OK と表示</p>
+    <p>integrity をわざと変える → スクリプトが実行されない</p>
+
+    <!-- ★ 正しい integrity 値をセットしてテストする -->
+    <script
+      src="./index.js"
+      integrity="sha256-2y5ze0lRlLfx5ZhdKgnJFBSgz7a23E13skbDQZFSkcQ="
+      crossorigin="anonymous"
+    ></script>
+
+    <p>※ integrity を変更すると index.js が実行されなくなる</p>
+  </body>
+</html>
