@@ -70,6 +70,21 @@
     link.href = `#${fragmentName}`;
     link.innerHTML = heading.innerHTML;
 
+    /* 追加分：スムーズスクロール */
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // name="TOC1.2.3" のアンカーを探す（このコードでは heading を anchor の子にしているので anchor が確実）
+      const target = document.querySelector(`a[name="${fragmentName}"]`);
+      if (!target) return;
+
+      // スムーズに移動
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // URLのハッシュも一応合わせたいなら（任意）
+      history.replaceState(null, "", `#${fragmentName}`);
+    });
+
     let entry = document.createElement("div");
     entry.classList.add("TOCEntry", `TOCLevel${level}`);
     entry.append(link);

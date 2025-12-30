@@ -46,17 +46,17 @@ form.addEventListener("submit", (e) => {
 document.querySelector("#all").addEventListener("click", (e) => {
   e.preventDefault();
   window.history.pushState(null, "", "/ch15.04-10/ex12/all");
-  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
+  renderTodos(todos);
 });
 
 document.querySelector("#active").addEventListener("click", (e) => {
   e.preventDefault();
   window.history.pushState(null, "", "/ch15.04-10/ex12/active");
-  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
+  renderTodos(todos.filter((todo) => !todo.completed));
 });
 
 document.querySelector("#completed").addEventListener("click", (e) => {
   e.preventDefault();
   window.history.pushState(null, "", "/ch15.04-10/ex12/completed");
-  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
+  renderTodos(todos.filter((todo) => todo.completed));
 });

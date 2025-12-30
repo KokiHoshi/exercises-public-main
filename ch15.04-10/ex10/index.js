@@ -18,6 +18,14 @@ let animationId = null;
 // NOTE: download from https://soundeffect-lab.info/sound/button/mp3/decision1.mp3
 const sound = new Audio("/ch15.04-10/ex10/decision1.mp3");
 
+// ===== 追加: 一定更新のための設定・状態 =====
+// 世代更新間隔（ms）：例 100ms = 10世代/秒
+const TICK_MS = 100;
+// 固定タイムステップ用
+let lastTime = 0;
+let acc = 0;
+// ========================================
+
 // ライフゲームのセル (true or false) をランダムに初期化する
 let grid = new Array(ROWS)
   .fill(null)
@@ -46,7 +54,32 @@ function updateGrid(grid) {
 
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
-      // 周囲のセルの生存数を数えて nextGrid[row][col] に true or false を設定する (実装してね)
+      // 周囲8マスの生存数を数える（端は盤面外＝死として扱う）
+      let aliveNeighbors = 0;
+
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+
+          const r = row + dr;
+          const c = col + dc;
+
+          if (r < 0 || r >= ROWS || c < 0 || c >= COLS) continue;
+
+          if (grid[r][c]) aliveNeighbors++;
+        }
+      }
+
+      const alive = grid[row][col];
+
+      // Conway's Game of Life のルール
+      // 生存: 生きていて 2 or 3 なら生存
+      // 誕生: 死んでいて 3 なら誕生
+      if (alive) {
+        nextGrid[row][col] = aliveNeighbors === 2 || aliveNeighbors === 3;
+      } else {
+        nextGrid[row][col] = aliveNeighbors === 3;
+      }
     }
   }
   return nextGrid;
@@ -67,10 +100,26 @@ canvas.addEventListener("click", function (evt) {
 // requestAnimationFrame によって一定間隔で更新・描画を行う
 // NOTE: リフレッシュレートの高い画面では速く実行される (これを防ぐ場合は下記の例を参照)
 // https://developer.mozilla.org/ja/docs/Web/API/Window/requestAnimationFrame
-function update() {
-  grid = updateGrid(grid);
+function update(timestamp) {
+  // ===== 追加: 固定タイムステップ（更新頻度を一定にする） =====
+  if (!lastTime) lastTime = timestamp;
+
+  const delta = timestamp - lastTime;
+  lastTime = timestamp;
+
+  // 重いフレームでaccが溜まりすぎるのを防ぐ
+  acc += Math.min(delta, 250);
+
+  // ★一定間隔：TICK_MSごとにだけ世代更新
+  while (acc >= TICK_MS) {
+    grid = updateGrid(grid);
+    acc -= TICK_MS;
+  }
+
+  // 描画は毎フレーム行う
   renderGrid(grid);
   animationId = requestAnimationFrame(update);
+  // ============================================================
 }
 
 startButton.addEventListener("click", () => {
@@ -78,7 +127,11 @@ startButton.addEventListener("click", () => {
   if (animationId) {
     return;
   }
-  update();
+  // ===== 追加: タイミング用変数をリセットして開始 =====
+  lastTime = 0;
+  acc = 0;
+  animationId = requestAnimationFrame(update);
+  // =================================================
 });
 
 pauseButton.addEventListener("click", () => {

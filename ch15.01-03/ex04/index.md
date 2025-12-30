@@ -51,3 +51,5 @@ undefined = 123;
 console.log(undefined); // 123（上書きされてしまう）
 var undefined; // 未初期化変数 = 読み取り専用の undefined を意図的に作る
 ```
+
+void演算子 void(0)=undefinedとなることを利用して確認していた

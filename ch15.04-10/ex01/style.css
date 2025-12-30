@@ -1,3 +1,163 @@
-.completed {
+/* 全体：Win95っぽいグレー背景＋当時風のフォント優先 */
+body {
+  margin: 0;
+  padding: 20px 12px;
+  background: #c0c0c0; /* 典型的なWin95の背景色 */
+  color: #000;
+  font-family: "MS Sans Serif", Tahoma, system-ui, sans-serif;
+}
+
+/* フォーム：ウィンドウっぽい枠（外側が盛り上がって見える） */
+#new-todo-form {
+  max-width: 720px;
+  margin: 0 auto 14px;
+  padding: 10px;
+  display: flex;
+  gap: 8px;
+  background: #c0c0c0;
+
+  /* Win95の立体枠：左上が明るく、右下が暗い */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+}
+
+/* 入力欄：内側に凹んだ枠（押し込まれて見える） */
+#new-todo {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #000;
+
+  /* 凹み枠：左上が暗く、右下が明るい */
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+
+  outline: none;
+}
+
+/* フォーカス時：青い点線で「選択中」っぽくする */
+#new-todo:focus {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+/* 追加ボタン：盛り上がった3Dボタン */
+#new-todo-form button {
+  padding: 8px 14px;
+  font-size: 14px;
+  background: #c0c0c0;
+  color: #000;
+  cursor: pointer;
+
+  /* 盛り上がり枠：左上明るい、右下暗い */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+}
+
+/* ホバー：ほんの少し明るく（当時風に控えめ） */
+#new-todo-form button:hover {
+  background: #d0d0d0;
+}
+
+/* 押下：枠を反転して「凹む」表現（押した感） */
+#new-todo-form button:active {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: translate(1px, 1px);
+}
+
+/* ToDoリスト：黒丸を消し、フォームと幅を合わせる */
+#todo-list {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* ToDo1件：小さい「ダイアログ枠」っぽい立体感 */
+#todo-list li {
+  background: #c0c0c0;
+  margin-bottom: 8px;
+  padding: 8px 10px;
+
+  /* 外枠：盛り上がり */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+}
+
+/* 行の中身：チェック/本文/削除を横並び */
+#todo-list li .view {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* チェック：少し大きめ＆カーソル */
+#todo-list .toggle {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* 本文：横に伸びて折り返す（長文も崩れない） */
+#todo-list .content {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+/* 削除ボタン：Win95の小ボタン風（文字は ❌ のまま活かす） */
+#todo-list .destroy {
+  padding: 4px 8px;
+  background: #c0c0c0;
+  cursor: pointer;
+
+  /* 小さめ立体ボタン */
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #808080;
+  border-bottom: 2px solid #808080;
+}
+
+/* 削除ボタン押下：凹む表現 */
+#todo-list .destroy:active {
+  border-top: 2px solid #808080;
+  border-left: 2px solid #808080;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: translate(1px, 1px);
+}
+
+/* 完了状態：灰色＆打ち消し線で「終わった感」 */
+#todo-list li.completed .content {
+  color: #404040;
   text-decoration: line-through;
+}
+
+/* 完了状態：背景を少し暗くして区別（気づきやすい） */
+#todo-list li.completed {
+  background: #bcbcbc;
+}
+
+/* スマホ：フォームを縦並びにしてWin95感を維持しつつ操作性確保 */
+@media (max-width: 520px) {
+  #new-todo-form {
+    flex-direction: column;
+  }
+
+  #new-todo-form button {
+    width: 100%;
+  }
 }
