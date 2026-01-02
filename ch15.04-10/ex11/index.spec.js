@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("ex11 ToDo filter app (E2E)", () => {
-  test("filtering works and reflects toggle/delete", async ({ page }) => {
+test.describe("ex11 ToDo フィルタアプリ（E2E）", () => {
+  test("フィルタ切替が動作し、完了切替・削除が表示に反映される", async ({
+    page,
+  }) => {
     await page.goto("http://localhost:3000/ch15.04-10/ex11/");
 
     const input = page.locator("#new-todo");

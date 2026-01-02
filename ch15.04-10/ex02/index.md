@@ -1,6 +1,6 @@
 ## Tailwind CSSとは
 
-「ユーティリティファースト」なCSSフレームワークで、bg-slate-100 や p-4、flex のような 小さな役割のクラス（utility class）をHTMLに直接付けてデザインを組み立てる方式。
+ユーティリティファーストなCSSフレームワークで、bg-slate-100 や p-4、flex のような 小さな役割のクラス（utility class）をHTMLに直接付けてデザインを組み立てる方式。
 
 ### 特徴
 

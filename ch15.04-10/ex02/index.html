@@ -1,50 +1,64 @@
-<body class="min-h-screen bg-slate-100 text-slate-900">
-  <main class="mx-auto max-w-xl px-4 py-10">
-    <header class="mb-6">
-      <h1 class="text-2xl font-bold tracking-tight">Simple ToDo</h1>
-      <p class="mt-1 text-sm text-slate-600">
-        Add a task, check it when done, and remove it ✨
-      </p>
-    </header>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple ToDo</title>
 
-    <form
-      id="new-todo-form"
-      class="flex gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
-    >
-      <input
-        type="text"
-        id="new-todo"
-        placeholder="What needs to be done?"
-        class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-      />
-      <button
-        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:translate-y-px"
+    <!-- Tailwind CLI で生成した CSS を読み込む -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto max-w-xl px-4 py-10">
+      <header class="mb-6">
+        <h1 class="text-2xl font-bold tracking-tight">Simple ToDo</h1>
+        <p class="mt-1 text-sm text-slate-600">
+          Add a task, check it when done, and remove it ✨
+        </p>
+      </header>
+
+      <form
+        id="new-todo-form"
+        class="flex gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm"
       >
-        Add
-      </button>
-    </form>
+        <input
+          type="text"
+          id="new-todo"
+          placeholder="What needs to be done?"
+          class="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+        />
+        <button
+          class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 active:translate-y-px"
+        >
+          Add
+        </button>
+      </form>
 
-    <ul id="todo-list" class="mt-4 space-y-2">
-      <!-- JSで <li> を追加 -->
-    </ul>
+      <ul id="todo-list" class="mt-4 space-y-2">
+        <!-- JSで <li> を追加 -->
+      </ul>
 
-    <template id="todo-template">
-      <li class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-        <div class="view flex items-center gap-3">
-          <input
-            class="toggle h-4 w-4 cursor-pointer accent-indigo-600"
-            type="checkbox"
-          />
-          <label class="content flex-1 text-sm leading-6"></label>
-          <button
-            class="destroy rounded-lg px-2 py-1 text-sm text-slate-500 hover:bg-rose-50 hover:text-rose-600"
-            aria-label="Delete"
-            title="Delete"
-          >
-            ❌
-          </button>
-        </div>
-      </li>
-    </template>
-  </main>
-</body>
+      <template id="todo-template">
+        <li class="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div class="view flex items-center gap-3">
+            <input
+              class="toggle h-4 w-4 cursor-pointer accent-indigo-600"
+              type="checkbox"
+            />
+            <label class="content flex-1 text-sm leading-6"></label>
+            <button
+              class="destroy rounded-lg px-2 py-1 text-sm text-slate-500 hover:bg-rose-50 hover:text-rose-600"
+              aria-label="Delete"
+              title="Delete"
+            >
+              ❌
+            </button>
+          </div>
+        </li>
+      </template>
+    </main>
+
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -29,7 +29,7 @@ function setupDom() {
   `;
 }
 
-// ★ESM環境でモジュールキャッシュを避けるため、クエリを付けて毎回別モジュールとして読み込む
+// ESM環境でモジュールキャッシュを避けるため、クエリを付けて毎回別モジュールとして読み込む
 async function loadAppModuleFresh() {
   await import(`./index.js?cacheBust=${Math.random()}`);
 }
@@ -54,20 +54,20 @@ function getItemTexts() {
   return getItems().map((li) => li.querySelector("label.content").textContent);
 }
 
-describe("ex11 ToDo filter app", () => {
+describe("ex11 ToDo フィルタアプリ", () => {
   beforeEach(async () => {
     setupDom();
     window.location.hash = "#/";
     await loadAppModuleFresh();
   });
 
-  test("add todos and show All", () => {
+  test("ToDo を追加すると All に表示される", () => {
     submitTodo("A");
     submitTodo("B");
     expect(getItemTexts()).toEqual(["A", "B"]);
   });
 
-  test("Active filter shows only incomplete", () => {
+  test("Active フィルタは未完了のみ表示する", () => {
     submitTodo("A");
     submitTodo("B");
 
@@ -80,7 +80,7 @@ describe("ex11 ToDo filter app", () => {
     expect(getItemTexts()).toEqual(["B"]);
   });
 
-  test("Completed filter shows only completed", () => {
+  test("Completed フィルタは完了のみ表示する", () => {
     submitTodo("A");
     submitTodo("B");
 
@@ -93,7 +93,7 @@ describe("ex11 ToDo filter app", () => {
     expect(getItemTexts()).toEqual(["B"]);
   });
 
-  test("toggle completion in Active view updates list immediately", () => {
+  test("Active 表示中に完了へ切り替えると、一覧から即座に消える", () => {
     submitTodo("A");
 
     setHash("#/active");
@@ -107,7 +107,7 @@ describe("ex11 ToDo filter app", () => {
     expect(getItems().length).toBe(0);
   });
 
-  test("delete in Completed view updates list immediately", () => {
+  test("Completed 表示中に削除すると、一覧から即座に消える（All では残件が確認できる）", () => {
     submitTodo("A");
     submitTodo("B");
 
