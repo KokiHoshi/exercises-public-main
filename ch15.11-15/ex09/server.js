@@ -10,12 +10,16 @@ const FRAME_RATE = 10;
 const port = 3003;
 const wss = new WebSocketServer({ port });
 
+wss.on("listening", () => {
+  console.log(`Life Game WebSocket server listening on ws://localhost:${port}`);
+});
+
 // ライフゲームのセル (true or false) をランダムに初期化する
 let grid = new Array(ROWS)
-.fill(null)
-.map(() =>
-  new Array(COLS).fill(null).map(() => !!Math.floor(Math.random() * 2))
-);
+  .fill(null)
+  .map(() =>
+    new Array(COLS).fill(null).map(() => !!Math.floor(Math.random() * 2)),
+  );
 // 停止状態
 let paused = true;
 
@@ -62,6 +66,33 @@ function updateGrid(grid) {
     for (let col = 0; col < COLS; col++) {
       // 周囲のセルの生存数を数えて nextGrid[row][col] に true or false を設定する
       //（15.04-10.10の実装を利用）
+      // 周囲8マスの生存数を数える（端は盤面外＝死として扱う）
+      let aliveNeighbors = 0;
+
+      for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+          if (dr === 0 && dc === 0) continue;
+
+          const r = row + dr;
+          const c = col + dc;
+
+          // 盤面外は無視（死として扱う）
+          if (r < 0 || r >= ROWS || c < 0 || c >= COLS) continue;
+
+          if (grid[r][c]) aliveNeighbors++;
+        }
+      }
+
+      const alive = grid[row][col];
+
+      // Conway's Game of Life のルール
+      // 生存: 生きていて 2 or 3 なら生存
+      // 誕生: 死んでいて 3 なら誕生
+      if (alive) {
+        nextGrid[row][col] = aliveNeighbors === 2 || aliveNeighbors === 3;
+      } else {
+        nextGrid[row][col] = aliveNeighbors === 3;
+      }
     }
   }
   return nextGrid;

@@ -44,7 +44,36 @@ async function serveContentsHandler(url, _req, res) {
 // CSP のヘッダを返すミドルウェア
 function cspMiddleware(_url, req, res) {
   // TODO: CSP ヘッダを設定する
-  // res.setHeader("Content-Security-Policy", "TODO");
+  const pathname = new URL(`http://localhost${req.url}`).pathname;
+  if (pathname !== "/") return true;
+
+  const nonce = crypto.randomBytes(16).toString("base64");
+
+  // nonce付きscriptだけ許可
+  res.setHeader("Content-Security-Policy", `script-src 'nonce-${nonce}'`);
+
+  // HTMLレスポンスだけ書き換えて nonce を注入
+  const originalEnd = res.end.bind(res);
+  res.end = (chunk, encoding, cb) => {
+    const html = Buffer.isBuffer(chunk)
+      ? chunk.toString("utf8")
+      : String(chunk);
+
+    const patched = html
+      // インライン(RICOH)にnonce
+      .replace(
+        /<script([^>]*?)type="text\/javascript"([^>]*)>/i,
+        `<script$1type="text/javascript"$2 nonce="${nonce}">`,
+      )
+      // /hello.js にnonce（属性順不問）
+      .replace(
+        /<script([^>]*?)\ssrc="\.\/hello\.js"([^>]*)>/i,
+        `<script$1 src="./hello.js"$2 nonce="${nonce}">`,
+      );
+
+    return originalEnd(Buffer.from(patched, "utf8"), encoding, cb);
+  };
+
   return true;
 }
 

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx playwright test ch15.11-15/ex05/index.spec.js --repeat-each=5)"
+    ]
+  }
+}
