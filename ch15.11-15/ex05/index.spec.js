@@ -23,6 +23,8 @@ async function setCompleted(page, title, completed) {
     await checkbox.uncheck();
     await expect(checkbox).not.toBeChecked();
   }
+  // IndexedDB更新完了を待つ（data-saving が消えるまで）
+  await expect(item).not.toHaveAttribute("data-saving", "true");
 }
 
 async function deleteTodo(page, title) {
@@ -68,11 +70,10 @@ test("リロードしても ToDo/チェック状態が残る（IndexedDB）", as
 });
 
 test("一度閉じて再度開いても ToDo/チェック状態が残る（IndexedDB）", async ({
-  browser,
+  context,
 }) => {
   // 起動①
-  const contextA = await browser.newContext();
-  const pageA = await contextA.newPage();
+  const pageA = await context.newPage();
   failOnPageErrors(pageA);
 
   await resetIndexedDB(pageA);
@@ -81,12 +82,11 @@ test("一度閉じて再度開いても ToDo/チェック状態が残る（Index
   await addTodo(pageA, title);
   await setCompleted(pageA, title, true);
 
-  // 「閉じる」
-  await contextA.close();
+  // 「閉じる」（タブを閉じる想定）
+  await pageA.close();
 
-  // 起動②（新しいブラウザ起動相当）
-  const contextB = await browser.newContext();
-  const pageB = await contextB.newPage();
+  // 起動②（同一プロファイルで新しいタブを開く想定）
+  const pageB = await context.newPage();
   failOnPageErrors(pageB);
 
   await pageB.goto(APP_URL);
@@ -95,7 +95,7 @@ test("一度閉じて再度開いても ToDo/チェック状態が残る（Index
   await expect(item).toBeVisible();
   await expect(item.locator('input[type="checkbox"]')).toBeChecked();
 
-  await contextB.close();
+  await pageB.close();
 });
 
 test("タブAで変更 → タブBが自動反映される（BroadcastChannel）", async ({
