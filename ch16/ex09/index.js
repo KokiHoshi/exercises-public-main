@@ -131,7 +131,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
 
   const app = createApp(root);
 
-  // [サンプル対応] server.listen(port); console.log("Listening on port", port);
+  // server.listen(port); console.log("Listening on port", port);
   app.listen(port, () => {
     console.log("Listening on port", port);
   });
