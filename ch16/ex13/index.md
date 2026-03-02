@@ -1,15 +1,14 @@
 ## `node path/to/shell.js` の実行結果
 
 - コマンドラインに`>`が出て入力待ちになる
-- `cd` と、パイプ・リダイレクト無しの単純コマンドは動く
+- パイプ・リダイレクト無しのコマンドは動く
 - `> / < / | `を含むコマンドは未実装なので動かず、何も起きない
 
 ## 修正後の実行結果
 
-### パイプ
-
-### リダイレクト
-
+```bash
+$ echo HELLO | tr [:upper:] [:lower:] > hello.txt
 ```
-> echo hello > hello.txt
-```
+
+- hello.txt が生成
+- hello.txtにはhelloと記載

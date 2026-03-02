@@ -12,7 +12,6 @@ export async function checkEntry(path) {
       return "directory";
     }
 
-    // それ以外の可能性も考慮
     if (stats.isSymbolicLink()) {
       return "symlink";
     }
