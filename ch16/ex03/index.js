@@ -1,6 +1,6 @@
 import crypto from "crypto";
 // ここを埋める
-import fs from "fs"; // fs.promises を使う
+import fs from "fs";
 import path from "path";
 
 // 鍵を生成する

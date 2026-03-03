@@ -46,7 +46,7 @@ function serve(rootDirectory, port) {
       request.pipe(response);
     }
 
-    // PUT でアップロード（ストリーム）を受ける
+    // 追加：PUT でアップロード（ストリーム）を受ける
     else if (request.method === "PUT") {
       // エンドポイントをローカルファイルシステムのファイルにマッピングする。
       let filename = endpoint.substring(1); // 最初の/を取り除く。
@@ -66,7 +66,7 @@ function serve(rootDirectory, port) {
       }
 
       try {
-        // 親ディレクトリを作成（/foo/bar/hello.txt でもOKにする）
+        // 親ディレクトリを作成
         await fsp.mkdir(path.dirname(filename), { recursive: true });
 
         // リクエストボディ（Readable）をそのままファイルへパイプ

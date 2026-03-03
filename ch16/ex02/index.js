@@ -34,7 +34,7 @@ async function startChild() {
 // 2種類以上トラップ（例：SIGINT, SIGTERM）
 const TRAP_SIGNALS = ["SIGINT", "SIGTERM"];
 
-// 親がシグナルを受けたときの処理：子にも同じシグナルを送って、子がそのシグナルで終了したのを確認し、親も終了
+// 親がシグナルを受けたとき子にも同じシグナルを送って、子がそのシグナルで終了したのを確認し、親も終了
 async function handleSignal(sig) {
   if (shuttingDown) return;
   shuttingDown = true;
@@ -54,7 +54,7 @@ async function handleSignal(sig) {
   // 子の終了を待つ（childClosePromise が無い場合は念のため即終了）
   const [code, signal] = (await childClosePromise) ?? [null, null];
 
-  // 「子がそのシグナルで終了したことを確認」
+  // 子がそのシグナルで終了したことを確認
   if (signal === sig) {
     console.log(`[parent] confirmed: child terminated by ${signal}`);
   } else {
@@ -63,8 +63,8 @@ async function handleSignal(sig) {
     );
   }
 
-  // 親も終了（“同じシグナルで親も落ちた”形にする）
-  // ※無限ループ防止に、該当シグナルのハンドラを外してから自分に送る
+  // 親も終了
+  // 該当シグナルのハンドラを外してから自分に送る
   process.removeAllListeners(sig);
   process.kill(process.pid, sig);
 }
@@ -80,11 +80,11 @@ for (const sig of TRAP_SIGNALS) {
   while (true) {
     const [code, signal] = await startChild();
 
-    // シグナルで落ちたなら（= 親から転送して落とした等）親も終了側に寄せる
+    // シグナルで落ちたなら親も終了側に寄せる
     if (signal) {
       console.log(`[parent] child closed by signal=${signal}`);
       if (!shuttingDown) {
-        // 何らかの外部要因で子がシグナル終了したケースも、親も終了する方針にする
+        // 何らかの外部要因で子がシグナル終了したケースも、親も終了する
         await handleSignal(signal);
       }
       break;
@@ -97,7 +97,7 @@ for (const sig of TRAP_SIGNALS) {
       continue;
     }
 
-    // 正常終了（今回は child.js が通常は exit(0) しないけど、念のため）
+    // 正常終了
     console.log("[parent] child exited normally -> parent exits");
     break;
   }

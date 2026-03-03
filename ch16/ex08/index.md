@@ -57,8 +57,7 @@
   GET https://api.github.com/repos/kokiHoshi/test-gh-cli/issues?state=open&per_page=30
   headers: {
   Accept: 'application/vnd.github+json',
-  Authorization: 'Bearer github_pat_11BCXFPXQ0KTBFzIFzQl9p_vhIQGGxneDRURsZb0dHipbJPyYwcu
-  AJ8ERCmtjuPn7BVYOPV6CRn1dYx76Q', 'X-GitHub-Api-Version': '2022-11-28'
+  Authorization: 'Bearer github_pat_XXXXX', 'X-GitHub-Api-Version': '2022-11-28'
   }
   ---- HTTP RESPONSE ----
   status: 200 OK

@@ -57,12 +57,12 @@ Node.js では process.stderr。
 - `echo FOO | node cat.mjs`
   FOO が表示されてすぐ終了した。
 - `node cat.mjs > output.txt`
-  入力待ちになり、入力した内容が output.txt に書かれる。
+  入力待ちになり、入力した内容が output.txt に書かれた。
 - `node cat.mjs file`
   file の内容がターミナルに表示されて終了。
 - `node cat.mjs file > output.txt`
   output.txt がfileの内容で書き換えられ、ターミナルには出ない。
 - `node cat.mjs invalid-file > output.txt`
-  ファイルが無いのでエラーが出る。stdout はファイルに向いているが、エラーは stderr なのでターミナルに表示される。output.txt は空。
+  ファイルが無いのでエラーがターミナルに表示された。output.txt は空。
 - `node cat.mjs invalid-file 2> error.txt`
   エラーが error.txt に保存され、ターミナルには出ない。
