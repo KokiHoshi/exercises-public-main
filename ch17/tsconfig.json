@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "rootDir": "./ex09",
+    "outDir": "./ex09/dist",
+    "noEmitOnError": true
+  },
+  "include": ["ex09/*.ts"]
+}
