@@ -1,27 +1,3 @@
-// @flow
-/*::
-export type User = {|
-  id: number,
-  name: string,
-|};
-
-export type Task = {
-  title: string,
-  completed: boolean,
-  user: User,
-  ...
-};
-
-export type Priority = "low" | "middle" | "high";
-export type PriorityTask = {
-  title: string,
-  completed: boolean,
-  user: User,
-  priority: Priority,
-  ...
-};
-*/
-
 // Userオブジェクトであることを判定する
 function isUserObject(obj /*: any */) /*: boolean */ {
   return (
@@ -67,14 +43,14 @@ export class TaskManager /*::<T: Task>*/ {
 
 // priority="low"または完了済のタスクを判定する
 export function isLowOrCompletedTask(
-  priorityTask /*: PriorityTask */
+  priorityTask /*: PriorityTask */,
 ) /*: boolean */ {
   return priorityTask.priority === 'low' || priorityTask.completed;
 }
 
 // 判定関数の否定結果を返す関数を生成する
-export function not/*::<T>*/(
-  f /*: (arg: T) => boolean */
+export function not /*::<T>*/(
+  f /*: (arg: T) => boolean */,
 ) /*: (arg: T) => boolean */ {
   return (arg) => !f(arg);
 }
