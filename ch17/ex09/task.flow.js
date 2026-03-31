@@ -1,3 +1,27 @@
+// @flow
+/*::
+export type User = {|
+  id: number,
+  name: string,
+|};
+
+export type Task = {
+  title: string,
+  completed: boolean,
+  user: User,
+  ...
+};
+
+export type Priority = "low" | "middle" | "high";
+export type PriorityTask = {
+  title: string,
+  completed: boolean,
+  user: User,
+  priority: Priority,
+  ...
+};
+*/
+
 // Userオブジェクトであることを判定する
 function isUserObject(obj /*: any */) /*: boolean */ {
   return (
